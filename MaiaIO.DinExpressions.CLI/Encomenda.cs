@@ -4,7 +4,7 @@ namespace MaiaIO.DinExpressions.CLI
 {
     public class Encomenda
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
         public string EmpresaOrigem { get; set; }
         public string EmpresaDestino { get; set; }
         public DateTime PrevisaoChegada { get; set; }
@@ -14,7 +14,7 @@ namespace MaiaIO.DinExpressions.CLI
 
     public class ListarEncomedaComando
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
         public string EmpresaOrigem { get; set; }
         public string EmpresaDestino { get; set; }
         public DateTime PrevisaoChegada { get; set; }
