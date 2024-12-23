@@ -40,6 +40,21 @@ namespace MaiaIO.DinExpressions.CLI
             return expression;
         }
 
+        public static Expression DateExpressionResolver(PropertyInfo info, Expression expression, ParameterExpression parameter, R filtro)
+        {
+            DateTime value = (DateTime)info.GetValue(filtro);
+
+            if (DateTime.MinValue == value) return expression;
+
+            MemberExpression filterParameter = Expression.Property(parameter, info.Name);
+            ConstantExpression constParamerter = Expression.Constant(value);
+            BinaryExpression operation = Expression.GreaterThanOrEqual(filterParameter, constParamerter);
+
+            expression = expression == null ? operation : Expression.And(expression, operation);
+
+            return expression;
+        }
+
 
         public static Expression LongExpressionResolver(PropertyInfo info, Expression expression, ParameterExpression parameter, R filtro)
         {
