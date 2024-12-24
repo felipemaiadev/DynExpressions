@@ -20,8 +20,12 @@ namespace MaiaIO.DinExpressions.CLI
         public string EmpresaOrigem { get; set; }
         public string EmpresaDestino { get; set; }
 
-        [IntervalFilter("DataCadastro", "Begin")]
-        public DateTime PrevisaoChegada { get; set; }
+        [IntervalFilter("Begin", "PrevisaoChegada")]
+        public DateTime PrevisaoChegadaInicio { get; set; }
+
+        [IntervalFilter("End", "PrevisaoChegada")]
+        public DateTime PrevisaoChegadaFim{ get; set; }
+
         public DateTime DataCriacao { get; set; }
         public bool IsActive { get; set; }
     }
