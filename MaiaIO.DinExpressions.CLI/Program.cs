@@ -25,11 +25,11 @@ var encomendas = new List<Encomenda>() {
            new Encomenda { Id = 1, EmpresaOrigem = "XPTO10", EmpresaDestino = "XPTO15", DataCriacao = new DateTime(2024,3,1), PrevisaoChegada = new DateTime(2024,3,1) , IsActive = true },
            new Encomenda { Id = 2, EmpresaOrigem = "PGTO21", EmpresaDestino = "XPTO12", DataCriacao = new DateTime(2024, 4, 4), PrevisaoChegada = new DateTime(2024, 4, 4) , IsActive = false },
            new Encomenda { Id = 3, EmpresaOrigem = "WHTO36", EmpresaDestino = "XPTO14", DataCriacao = new DateTime(2024, 1, 5), PrevisaoChegada = new DateTime(2024, 1, 5), IsActive = false },
-           new Encomenda { Id = 4, EmpresaOrigem = "XPTO90", EmpresaDestino = "XPTO28", DataCriacao = new DateTime(2024,3,1), PrevisaoChegada =  new DateTime(2024,3,1) , IsActive = true },
+           new Encomenda { Id = 4, EmpresaOrigem = "XPTO90", EmpresaDestino = "XPTO28", DataCriacao = new DateTime(2024,6,1), PrevisaoChegada =  new DateTime(2024,6,1) , IsActive = true },
     };
 
 
-var comando = new ListarEncomedaComando { PrevisaoChegadaInicio = new DateTime(2024, 3, 5) , PrevisaoChegadaFim = new DateTime(2024, 12, 5) };
+var comando = new ListarEncomedaComando { PrevisaoChegadaInicio = new DateTime(2024, 3, 5) , PrevisaoChegadaFim = new DateTime(2024, 12, 31) };
 
 Func<Encomenda, bool> queryEncomendas = GenericExpressionBuilder<ListarEncomedaComando, Encomenda>.FiltroCreate<Encomenda>(comando);
 var resultEncomenda = encomendas.Where(queryEncomendas).ToList();
