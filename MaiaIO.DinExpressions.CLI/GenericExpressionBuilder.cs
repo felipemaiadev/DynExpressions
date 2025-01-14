@@ -141,6 +141,25 @@ namespace MaiaIO.DinExpressions.CLI
             return expression;
         }
 
+        public static Expression ArrayExpressionResolver(PropertyInfo info, Expression expression, ParameterExpression parameter, R filtro)
+        {
+            int[] value = (int[])info.GetValue(filtro);
+
+            if (value.Length == 0 ) return expression;
+
+
+
+            MemberExpression filterParameter = Expression.Property(parameter, "Produtos");
+            xsdcazvar nameProperty = Expression.Poperty(filterParameter, "Id");
+            MethodCallExpression constParamerter = Expression.Call(typeof(Enumerable), "Contains", new Type[] { typeof(int) }, 
+                                                                 parameter, Expression.Constant(value));
+            BinaryExpression operation = Expression.Equal(nameProperty, constParamerter);//
+
+            expression = expression == null ? operation : Expression.And(expression, operation);
+
+            return expression;
+        }
+
         public static Expression NotMapperdExpressionResolver(PropertyInfo info, Expression expression, ParameterExpression parameter, R filtro)
         {
             return expression;
@@ -172,6 +191,7 @@ namespace MaiaIO.DinExpressions.CLI
             { PropertyType: var type, Name: var name } when type == typeof(long) => LongExpressionResolver(info, expression, parameter, filtro),
             { PropertyType: var type, CustomAttributes: var attb } when type == typeof(DateTime) && attb.Count() > 0 => DateTimeExpressionResolver(info, expression, parameter, filtro),
             { PropertyType: var type, CustomAttributes: var attb } when type == typeof(DateTime) && attb.Count() == 0 => DateTimeBaseExpressionEndResolver(info, expression, parameter, filtro),
+            { PropertyType: var type} when type == typeof(Int32[]) => ArrayExpressionResolver(info, expression, parameter, filtro),
             _  => NotMapperdExpressionResolver(info, expression, parameter, filtro)
         };
 
