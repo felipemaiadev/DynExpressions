@@ -26,9 +26,22 @@ var pedidos = new List<Pedido>() {
            new Pedido { Id = 4, NomeCliente = "Alexander Richard Pettyfer", DataCompra = new DateTime(2024, 1, 5), IsActive = false, Produtos = pdd03 }
     };
 
-var comandoPedido = new ListarPedidoComando { ProdutosId = new[] {102} };
+var comandoPedido = new ListarPedidoComando { Id = 1 };
+
+var searchIdsPedido = new List<long> { 102, 202 };
+
+var searchProducts = new List<Produto>() { new Produto { Id = 102 }, new Produto { Id = 202 } };
 
 Func<Pedido, bool> queryPedidos = GenericExpressionBuilder<ListarPedidoComando, Pedido>.FiltroCreate<Pedido>(comandoPedido);
+
+var result = pedidos.Select(o => o.Produtos.Where(x => searchIdsPedido.Contains(x.Id))).ToList();
+
+
+result.ForEach(e => Console.WriteLine(e));
+
+Console.WriteLine("<== TESTE Encomendas ====>");
+
+
 var resultPedido = pedidos.Where(queryPedidos).ToList();
 resultPedido.ForEach(e => Console.WriteLine(e.Id));
 
