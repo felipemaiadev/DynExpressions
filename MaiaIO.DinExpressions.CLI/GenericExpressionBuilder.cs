@@ -141,6 +141,32 @@ namespace MaiaIO.DinExpressions.CLI
             return expression;
         }
 
+        public static Expression ArrayExpressionResolver(PropertyInfo info, Expression expression, ParameterExpression parameter, R filtro)
+        {
+            var value = info.GetValue(filtro);
+
+            if (value is  null) return expression;
+
+            var parameterProducts = Expression.Property(parameter, "Produtos");
+            var filterParameter = Expression.Parameter(typeof(Produto), "Produto");
+
+            var containMethod = typeof(List<long>).GetMethod("Contains", new[] { typeof(long) });
+            var idProperty = Expression.Property(filterParameter, "Id");
+            var containsCall = Expression.Call(Expression.Constant(value), containMethod, idProperty);
+
+            var anyMethod = typeof(Enumerable).GetMethods()
+                                                .Where(m => m.Name == "Any" && m.GetParameters().Length == 2)
+                                                .Single()
+                                                .MakeGenericMethod(typeof(Produto));
+
+            var operation = Expression.Call(null, anyMethod, parameterProducts, Expression.Lambda(containsCall, filterParameter));
+
+
+            expression = expression == null ? operation : Expression.And(expression, operation);
+
+            return expression;
+        }
+
         public static Expression NotMapperdExpressionResolver(PropertyInfo info, Expression expression, ParameterExpression parameter, R filtro)
         {
             return expression;
@@ -172,6 +198,7 @@ namespace MaiaIO.DinExpressions.CLI
             { PropertyType: var type, Name: var name } when type == typeof(long) => LongExpressionResolver(info, expression, parameter, filtro),
             { PropertyType: var type, CustomAttributes: var attb } when type == typeof(DateTime) && attb.Count() > 0 => DateTimeExpressionResolver(info, expression, parameter, filtro),
             { PropertyType: var type, CustomAttributes: var attb } when type == typeof(DateTime) && attb.Count() == 0 => DateTimeBaseExpressionEndResolver(info, expression, parameter, filtro),
+            { PropertyType: var type } when type == typeof(List<long>) => ArrayExpressionResolver(info, expression, parameter, filtro),
             _  => NotMapperdExpressionResolver(info, expression, parameter, filtro)
         };
 
