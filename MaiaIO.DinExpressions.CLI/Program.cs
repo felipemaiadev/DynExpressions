@@ -9,35 +9,42 @@ var pdd01 = new List<Produto>  { new Produto { Id=100, Price=20, ProdName="Bleac
                                  new Produto { Id=202, Price=25 , ProdName="Yuyu Hakusho Edicao #22" }
                                };
 
-var pdd02 = new List<Produto>  { new Produto { Id=310, Price=20, ProdName="Bleach Edicao #102"  } ,
+var pdd02 = new List<Produto>  { new Produto { Id=310, Price=20, ProdName="Bleach Edicao #102"  },
                                  new Produto { Id=120, Price=26 , ProdName="Bersek Edicao #09"  },
-                                 new Produto { Id=102, Price=25 , ProdName="Sailor Mooon  #02" }
+                                 new Produto { Id=302, Price=25 , ProdName="Sailor Mooon  #02" }
                                };
 
-var pdd03 = new List<Produto>  { new Produto { Id=100, Price=20, ProdName="Bleach Edicao #102"  } ,
-                                 new Produto { Id=120, Price=26 , ProdName="Bersek Edicao #09"  },
-                                 new Produto { Id=102, Price=25 , ProdName="Sailor Mooon  #02" }
+var pdd03 = new List<Produto>  { new Produto { Id=100, Price=20, ProdName="Bleach Edicao #102"  },
+                                 new Produto { Id=160, Price=26 , ProdName="Bersek Edicao #09"  },
+                                 new Produto { Id=102, Price=25 , ProdName="Sailor Mooon  #08" }
+                               };
+
+var pdd04 = new List<Produto>  { new Produto { Id=102, Price=25 , ProdName="Sailor Mooon  #08" } ,
+                                 new Produto { Id=302, Price=25 , ProdName="Sailor Mooon  #02" } ,
+                                 new Produto { Id=108, Price=25 , ProdName="Samurai Warriors #01" }
                                };
 
 var pedidos = new List<Pedido>() {
            new Pedido { Id = 1, NomeCliente = "Channing Matthew Tatum", DataCompra = new DateTime(2024,3,1) , IsActive = true, Produtos = pdd01 },
-           new Pedido { Id = 2, NomeCliente =  "Joseph Michael Manganiello", DataCompra = new DateTime(2024, 4, 4), IsActive = false, Produtos = pdd01 },
+           new Pedido { Id = 2, NomeCliente =  "Joseph Michael Manganiello", DataCompra = new DateTime(2024, 4, 4), IsActive = false, Produtos = pdd04 },
            new Pedido { Id = 3, NomeCliente = "Matthew Staton Bomer", DataCompra = new DateTime(2024, 1, 5), IsActive = false, Produtos = pdd02 },
            new Pedido { Id = 4, NomeCliente = "Alexander Richard Pettyfer", DataCompra = new DateTime(2024, 1, 5), IsActive = false, Produtos = pdd03 }
     };
 
-var comandoPedido = new ListarPedidoComando { Id = 1 };
+var comandoPedido = new ListarPedidoComando { Produtos = new List<long> { 310, 108 } };
 
-var searchIdsPedido = new List<long> { 102, 202 };
+var searchIdsPedido = new List<long> { 310, 108 };
 
 var searchProducts = new List<Produto>() { new Produto { Id = 102 }, new Produto { Id = 202 } };
 
 Func<Pedido, bool> queryPedidos = GenericExpressionBuilder<ListarPedidoComando, Pedido>.FiltroCreate<Pedido>(comandoPedido);
 
-var result = pedidos.Select(o => o.Produtos.Where(x => searchIdsPedido.Contains(x.Id))).ToList();
+//var result = pedidos.Where(o => o.Produtos.Any(x => searchIdsPedido.Contains(x.Id))).ToList();
 
+var result2 = pedidos.Where(queryPedidos).ToList(); 
 
-result.ForEach(e => Console.WriteLine(e));
+//result.ForEach(e => Console.WriteLine(e));
+result2.ForEach(e => Console.WriteLine(e));
 
 Console.WriteLine("<== TESTE Encomendas ====>");
 

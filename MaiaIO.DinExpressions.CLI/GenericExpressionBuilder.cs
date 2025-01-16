@@ -143,21 +143,24 @@ namespace MaiaIO.DinExpressions.CLI
 
         public static Expression ArrayExpressionResolver(PropertyInfo info, Expression expression, ParameterExpression parameter, R filtro)
         {
-            int[] value = (int[])info.GetValue(filtro);
+            var value = info.GetValue(filtro);
 
-            if (value.Length > 0 || value.Length <= 0 ) return expression;
+            if (value is  null) return expression;
 
+            var parameterProducts = Expression.Property(parameter, "Produtos");
+            var filterParameter = Expression.Parameter(typeof(Produto), "Produto");
 
-            var containMethod = typeof(Enumerable).GetMethod("Contains", new[] { typeof(IEnumerable<R>), typeof(R) });
+            var containMethod = typeof(List<long>).GetMethod("Contains", new[] { typeof(long) });
+            var idProperty = Expression.Property(filterParameter, "Id");
+            var containsCall = Expression.Call(Expression.Constant(value), containMethod, idProperty);
 
-            var parameterProducts = Expression.Parameter(typeof(List<Produto>), "Produtos");
-            //var parameterIds = Expression.Parameter(typeof (int[]) 
+            var anyMethod = typeof(Enumerable).GetMethods()
+                                                .Where(m => m.Name == "Any" && m.GetParameters().Length == 2)
+                                                .Single()
+                                                .MakeGenericMethod(typeof(Produto));
 
-            var filterParameter = Expression.Property(parameter, "Produtos");
-            //MemberExpression member =  Expression.Property(filterParameter, "Id");
-            //var nameProperty = Expression.Property(member, "Id");
-            MethodCallExpression constParamerter = Expression.Call(null, containMethod, parameter, Expression.Constant(value));
-            BinaryExpression operation = Expression.Equal(filterParameter, constParamerter);//
+            var operation = Expression.Call(null, anyMethod, parameterProducts, Expression.Lambda(containsCall, filterParameter));
+
 
             expression = expression == null ? operation : Expression.And(expression, operation);
 
@@ -195,7 +198,7 @@ namespace MaiaIO.DinExpressions.CLI
             { PropertyType: var type, Name: var name } when type == typeof(long) => LongExpressionResolver(info, expression, parameter, filtro),
             { PropertyType: var type, CustomAttributes: var attb } when type == typeof(DateTime) && attb.Count() > 0 => DateTimeExpressionResolver(info, expression, parameter, filtro),
             { PropertyType: var type, CustomAttributes: var attb } when type == typeof(DateTime) && attb.Count() == 0 => DateTimeBaseExpressionEndResolver(info, expression, parameter, filtro),
-            //{ PropertyType: var type} when type == typeof(Int32[]) => ArrayExpressionResolver(info, expression, parameter, filtro),
+            { PropertyType: var type } when type == typeof(List<long>) => ArrayExpressionResolver(info, expression, parameter, filtro),
             _  => NotMapperdExpressionResolver(info, expression, parameter, filtro)
         };
 

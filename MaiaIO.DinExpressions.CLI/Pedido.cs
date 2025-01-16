@@ -25,6 +25,6 @@ namespace MaiaIO.DinExpressions.CLI
         public string NomeCliente { get; set; }
         public DateTime DataCompra { get; set; }
         public bool IsActive { get; set; }
-        public int[] Produtos {  get; set; } 
+        public List<long> Produtos {  get; set; } 
     }
 }
