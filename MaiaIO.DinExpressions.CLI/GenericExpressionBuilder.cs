@@ -143,12 +143,21 @@ namespace MaiaIO.DinExpressions.CLI
 
         public static Expression ArrayExpressionResolver(PropertyInfo info, Expression expression, ParameterExpression parameter, R filtro)
         {
+
+            var attributes = info.CustomAttributes
+                                       .Where(x => x.ConstructorArguments.Count > 0)
+                                       .Select(x => x.ConstructorArguments).ToArray();
+
+            var nestedType = attributes[0].ElementAt(0);
+
             var value = info.GetValue(filtro);
 
             if (value is  null) return expression;
 
             var parameterProducts = Expression.Property(parameter, "Produtos");
-            var filterParameter = Expression.Parameter(typeof(Produto), "Produto");
+            //var filterParameter = Expression.Parameter(typeof(Produto), nestedType);
+
+            var filterParameter = Expression.Parameter(Type.GetType(nestedType.Value.ToString()), nameof(Produto));
 
             var containMethod = typeof(List<long>).GetMethod("Contains", new[] { typeof(long) });
             var idProperty = Expression.Property(filterParameter, "Id");

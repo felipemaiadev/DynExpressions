@@ -1,5 +1,13 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using MaiaIO.DinExpressions.CLI;
+using MaiaIO.DinExpressions.CLI.Enums;
+
+
+var resultBinary = EnumUtil.EnumKeyValueMapper<StatusPedidoEnum>(StatusPedidoEnum.Finalizado);
+var result = EnumUtil.EnumKeyValueMapper<SimNaoEnum>(SimNaoEnum.Sim);
+var resultString = EnumUtil.EnumKeyValueMapper<StatusEnum>(StatusEnum.Ativo);
+
+
 
 Console.WriteLine("<== TESTE pedidos ====>");
 
@@ -38,15 +46,6 @@ var searchIdsPedido = new List<long> { 310, 108 };
 var searchProducts = new List<Produto>() { new Produto { Id = 102 }, new Produto { Id = 202 } };
 
 Func<Pedido, bool> queryPedidos = GenericExpressionBuilder<ListarPedidoComando, Pedido>.FiltroCreate<Pedido>(comandoPedido);
-
-//var result = pedidos.Where(o => o.Produtos.Any(x => searchIdsPedido.Contains(x.Id))).ToList();
-
-var result2 = pedidos.Where(queryPedidos).ToList(); 
-
-//result.ForEach(e => Console.WriteLine(e));
-result2.ForEach(e => Console.WriteLine(e));
-
-Console.WriteLine("<== TESTE Encomendas ====>");
 
 
 var resultPedido = pedidos.Where(queryPedidos).ToList();

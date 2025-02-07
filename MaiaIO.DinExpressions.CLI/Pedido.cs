@@ -1,5 +1,7 @@
 ﻿
 
+using System.Reflection;
+
 namespace MaiaIO.DinExpressions.CLI
 {
     public class Pedido
@@ -19,12 +21,25 @@ namespace MaiaIO.DinExpressions.CLI
 
     }
 
-    public class ListarPedidoComando
+    public class NestedEntity : Attribute
+    {
+
+        public NestedEntity(Type type, string nestedCollectionName, string property)
+        {
+        }
+    }
+
+        public class ListarPedidoComando
     {
         public long Id { get; set; }
+        
         public string NomeCliente { get; set; }
+      
         public DateTime DataCompra { get; set; }
+        
         public bool IsActive { get; set; }
+
+        [NestedEntity(typeof(Produto), "Produtos", "Id")]
         public List<long> Produtos {  get; set; } 
     }
 }
