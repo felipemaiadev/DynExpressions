@@ -3,10 +3,14 @@ using MaiaIO.DinExpressions.CLI;
 using MaiaIO.DinExpressions.CLI.Enums;
 
 
-var resultBinary = EnumUtil.EnumKeyValueMapper<StatusPedidoEnum>(StatusPedidoEnum.Finalizado);
-var result = EnumUtil.EnumKeyValueMapper<SimNaoEnum>(SimNaoEnum.Sim);
-var resultString = EnumUtil.EnumKeyValueMapper<StatusEnum>(StatusEnum.Ativo);
+var resultBinary = EnumUtil.EnumKeyValueMapperToTuple<StatusPedidoEnum,int>(StatusPedidoEnum.Finalizado);
+var result = EnumUtil.EnumKeyValueMapperToTuple<SimNaoEnum, int>(SimNaoEnum.Sim);
+var resultString = EnumUtil.EnumKeyValueMapperToTuple<StatusEnum, int>(StatusEnum.Ativo);
 
+
+var resultBinary2 = EnumUtil.EnumKeyValueMapperToKVO<StatusPedidoEnum, int>(StatusPedidoEnum.Finalizado);
+var result2 = EnumUtil.EnumKeyValueMapperToKVO<SimNaoEnum, int>(SimNaoEnum.Sim);
+var resultString2 = EnumUtil.EnumKeyValueMapperToKVO<StatusEnum, int>(StatusEnum.Ativo);
 
 
 Console.WriteLine("<== TESTE pedidos ====>");
