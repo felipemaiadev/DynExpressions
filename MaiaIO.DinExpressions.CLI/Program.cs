@@ -1,14 +1,16 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using MaiaIO.DinExpressions.CLI;
 using MaiaIO.DinExpressions.CLI.Enums;
+using System.Collections;
+using static MaiaIO.DinExpressions.CLI.EnumUtil;
 
 
-var resultBinary = EnumUtil.EnumKeyValueMapperToTuple<StatusPedidoEnum,int>(StatusPedidoEnum.Finalizado);
+Tuple<StatusPedidoEnum,BitArray> resultBinary = EnumUtil.EnumKeyValueMapperToBitArray<StatusPedidoEnum,BitArray>(StatusPedidoEnum.Finalizado);
 var result = EnumUtil.EnumKeyValueMapperToTuple<SimNaoEnum, int>(SimNaoEnum.Sim);
 var resultString = EnumUtil.EnumKeyValueMapperToTuple<StatusEnum, int>(StatusEnum.Ativo);
 
 
-var resultBinary2 = EnumUtil.EnumKeyValueMapperToKVO<StatusPedidoEnum, int>(StatusPedidoEnum.Finalizado);
+EnumKvo<StatusPedidoEnum, int> resultBinary2 = EnumUtil.EnumKeyValueMapperToKVO<StatusPedidoEnum, int>(StatusPedidoEnum.Finalizado);
 var result2 = EnumUtil.EnumKeyValueMapperToKVO<SimNaoEnum, int>(SimNaoEnum.Sim);
 var resultString2 = EnumUtil.EnumKeyValueMapperToKVO<StatusEnum, int>(StatusEnum.Ativo);
 
